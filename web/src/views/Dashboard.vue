@@ -325,8 +325,9 @@ function onLogSearchTrigger() {
   refresh(true)
 }
 
-watch(currentAccountId, () => {
-  refresh()
+watch(currentAccountId, async () => {
+  await refresh()
+  scrollToBottom()
 })
 
 watch(() => status.value?.connection?.connected, (connected) => {
@@ -385,9 +386,18 @@ watch(allLogs, () => {
   })
 }, { deep: true })
 
-onMounted(() => {
+function scrollToBottom() {
+  nextTick(() => {
+    if (logContainer.value) {
+      logContainer.value.scrollTop = logContainer.value.scrollHeight
+    }
+  })
+}
+
+onMounted(async () => {
   statusStore.setRealtimeLogsEnabled(!hasActiveLogFilter.value)
-  refresh()
+  await refresh()
+  scrollToBottom()
 })
 
 // Auto refresh fallback every 10s (WS 断开或筛选条件启用时会回退 HTTP)
