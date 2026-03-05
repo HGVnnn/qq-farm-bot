@@ -951,13 +951,6 @@ async function visitFriendForSteal(friend, totalActions, myGid, accountId) {
         const maxSteal = toNum(plant.steal_num, 2);
         return stealCount < maxSteal;
     }).length - status.stealable.length;
-
-    if (filteredCount > 0) {
-        log('好友', `${name}: ${filteredCount}个蔬菜被黑名单过滤，实际可偷${status.stealable.length}个`, {
-            module: 'friend', event: '偷菜部分过滤', friendName: name, friendGid: gid, filteredCount, stealableCount: status.stealable.length
-        });
-    }
-
     // 只执行偷菜
     if (status.stealable.length > 0) {
         const precheck = await checkCanOperateRemote(gid, 10008);
